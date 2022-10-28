@@ -1,9 +1,9 @@
-import React, {useCallback, useState} from 'react';
-import {View, Text, StyleSheet, TextInput, Pressable} from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { View, Text, StyleSheet, TextInput, Pressable } from 'react-native';
 import colors from '../styles/colors';
-import {shadows} from '../styles/shadows';
-import {buttonStyles} from '../styles/button';
-import {Realm, useApp} from '@realm/react';
+import { shadows } from '../styles/shadows';
+import { buttonStyles } from '../styles/button';
+import { Realm, useApp } from '@realm/react';
 
 export enum AuthState {
   None,
@@ -21,8 +21,12 @@ export const LoginScreen = () => {
   // If the user presses "login" from the auth screen, try to log them in
   // with the supplied credentials
   const handleLogin = useCallback(async () => {
+    console.log(email);
+    console.log(password);
     setAuthState(AuthState.Loading);
-    const credentials = Realm.Credentials.emailPassword(email, password);
+    let token =
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FzaHdpbmFjaHUuYXV0aDAuY29tLyIsInN1YiI6IkhUZ1RBTktIWjdkZzloT2pZb2czWHlpbTlqVnI5S1FMQGNsaWVudHMiLCJhdWQiOiJyZWFsbS10ZXN0IiwiaWF0IjoxNjY2OTUyMDMyLCJleHAiOjE2NjY5NTIwNjIsImF6cCI6IkhUZ1RBTktIWjdkZzloT2pZb2czWHlpbTlqVnI5S1FMIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIn0.p_kST1eZ84ENz_p7mnzt-F09hO58CL9XaM3T5zL43q0';
+    const credentials = Realm.Credentials.jwt(token);
     try {
       await app.logIn(credentials);
       setAuthState(AuthState.None);
@@ -39,7 +43,7 @@ export const LoginScreen = () => {
 
     try {
       // Register the user...
-      await app.emailPasswordAuth.registerUser({email, password});
+      await app.emailPasswordAuth.registerUser({ email, password });
       // ...then login with the newly created user
       const credentials = Realm.Credentials.emailPassword(email, password);
 
