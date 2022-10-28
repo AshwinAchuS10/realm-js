@@ -24,11 +24,19 @@ export const LoginScreen = () => {
     console.log(email);
     console.log(password);
     setAuthState(AuthState.Loading);
+
     let token =
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FzaHdpbmFjaHUuYXV0aDAuY29tLyIsInN1YiI6IkhUZ1RBTktIWjdkZzloT2pZb2czWHlpbTlqVnI5S1FMQGNsaWVudHMiLCJhdWQiOiJyZWFsbS10ZXN0IiwiaWF0IjoxNjY2OTUyMDMyLCJleHAiOjE2NjY5NTIwNjIsImF6cCI6IkhUZ1RBTktIWjdkZzloT2pZb2czWHlpbTlqVnI5S1FMIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIn0.p_kST1eZ84ENz_p7mnzt-F09hO58CL9XaM3T5zL43q0';
+      // This token is valid for 30seconds 
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJodHRwczovL2FzaHdpbmFjaHUuYXV0aDAuY29tLyIsInN1YiI6IkhUZ1RBTktIWjdkZzloT2pZb2czWHlpbTlqVnI5S1FMQGNsaWVudHMiLCJhdWQiOiJyZWFsbS10ZXN0IiwiaWF0IjoxNjY2OTUzMDQ1LCJleHAiOjE2NjY5NTMwNzUsImF6cCI6IkhUZ1RBTktIWjdkZzloT2pZb2czWHlpbTlqVnI5S1FMIiwiZ3R5IjoiY2xpZW50LWNyZWRlbnRpYWxzIn0.Z6elJE6fwjZuX9b9yIyT9gyjbG5QsQAEuGbOpkBTm7o';
     const credentials = Realm.Credentials.jwt(token);
     try {
-      await app.logIn(credentials);
+      let user = await app.logIn(credentials);
+      // This Access token will be valid for 30minutes, we dont have to handle refresh the tokens, 
+      // as it will be automatically handled under the SDK
+      console.log('user: accessToken', user.accessToken);
+      // This Refresh token will be valid for 60days
+      console.log('user: refreshToken ', user.refreshToken);
+
       setAuthState(AuthState.None);
     } catch (e) {
       console.log('Error logging in', e);
